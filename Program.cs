@@ -9,7 +9,7 @@ namespace traffic
             private protected int waiting_time, priority;
             public car(string l) : this(l, "none") { }
             public car(string l, string d) : this(l, d, 0) { }
-            public car(string l, string d, int t) : this (l, d, t, "undefined") { }
+            public car(string l, string d, int t) : this(l, d, t, "undefined") { }
             public car(string l, string d, int t, string i)
             {
                 if ((l != "south" & l != "north" & l != "east" & l != "west") || (d != "south" & d != "north" & d != "east" & d != "west"))
@@ -61,19 +61,23 @@ namespace traffic
                 else
                     return waiting_time + 5;
             }
-            public static int operator >(car car1, car car2)
+            public static bool operator >(car car1, car car2)
             {
-                car 
+                return car1.waiting_time > car2.waiting_time;
+            }
+            public static bool operator <(car car1, car car2)
+            {
+                return car1.waiting_time < car2.waiting_time;
             }
         }
         class cargo : car
         {
-            private protected string load;
+            private protected int load;
             public cargo(string l) : this(l, "none") { }
             public cargo(string l, string d) : this(l, d, 0) { }
             public cargo(string l, string d, int t) : this(l, d, t, "undefined") { }
-            public cargo(string l, string d, int t, string i) : this(l, d, t, i, "no_load") { }
-            public cargo(string l, string d, int t, string i, string load) : base(l, d, t, i) 
+            public cargo(string l, string d, int t, string i) : this(l, d, t, i, 0) { }
+            public cargo(string l, string d, int t, string i, int load) : base(l, d, t, i)
             {
                 priority = 1;
             }
@@ -89,6 +93,14 @@ namespace traffic
                 location = destination;
                 destination = "none";
                 waiting_time = 0;
+            }
+            public static int operator >(cargo car1, cargo car2)
+            {
+                return car1.load - car2.load;
+            }
+            public static int operator <(cargo car1, cargo car2)
+            {
+                return car2.load - car1.load;
             }
         }
         class passenger : car
