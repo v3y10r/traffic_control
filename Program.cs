@@ -5,6 +5,8 @@ namespace traffic
     {
         abstract class car
         {
+            public virtual string loc { get;  set; }
+            public virtual string dest { get; set; }
             private protected string location, destination, id;
             private protected int waiting_time, priority;
             public car(string l) : this(l, "none") { }
@@ -72,7 +74,7 @@ namespace traffic
         }
         class cargo : car
         {
-            private protected int load;
+            private protected int load = 0;
             public cargo(string l) : this(l, "none") { }
             public cargo(string l, string d) : this(l, d, 0) { }
             public cargo(string l, string d, int t) : this(l, d, t, "undefined") { }
@@ -83,7 +85,8 @@ namespace traffic
             }
             public override void print_info()
             {
-                Console.WriteLine($"Cargo carrier {id} with {load} payload is located at {location} and needs to get to {destination}, its waiting time is {waiting_time}");
+                base.print_info();
+                Console.WriteLine($"It has {load} load");
             }
             public void travel(bool is_idle)
             {
@@ -105,6 +108,30 @@ namespace traffic
         }
         class passenger : car
         {
+            public override string loc
+            {
+                get
+                {
+                    return location;
+                }
+                set
+                {
+                    if (value == "south" || value == "north" || value == "east" || value == "west")
+                        location = value;
+                }
+            }
+            public override string dest
+            {
+                get
+                {
+                    return destination;
+                }
+                set
+                {
+                    if (value == "south" || value == "north" || value == "east" || value == "west")
+                        destination = value;
+                }
+            }
             public passenger(string l) : this(l, "none") { }
             public passenger(string l, string d) : this(l, d, 0) { }
             public passenger(string l, string d, int t) : this(l, d, t, "undefined") { }
@@ -119,11 +146,8 @@ namespace traffic
         }
         static void Main(string[] args)
         {
-            car test = new cargo("south", "north", 5);
-            test.print_info();
-            test.wait(15);
-            test.print_info();
-            test.travel();
+            car test = new passenger("south", "north", 5);
+            test.dest = "sun";
             test.print_info();
         }
     }
